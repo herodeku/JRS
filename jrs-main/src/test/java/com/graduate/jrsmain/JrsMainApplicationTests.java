@@ -12,5 +12,4 @@ public class JrsMainApplicationTests {
     @Test
     public void contextLoads() {
     }
-
 }

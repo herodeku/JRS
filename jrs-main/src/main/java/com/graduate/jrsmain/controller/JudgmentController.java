@@ -35,7 +35,7 @@ public class JudgmentController {
             @ApiParam(name = "page", value = "第page页（从0开始）", required = true)@PathVariable Integer page,
             @ApiParam(name = "size", value = "每页size条数据", required = true)@PathVariable Integer size,
             @ApiIgnore @RequestAttribute(name = "user") LawUser user){
-            logger.info("simpleSearch"+user.getAuthority()+":"+message);
+            logger.info("Search-Judgement"+"Authority:"+user.getAuthority()+"Message:"+message);
         PageRequest pageRequest = new PageRequest(page, size);
         return ResultUtil.success(judgmentService.simpleSearch(message,pageRequest));
     }

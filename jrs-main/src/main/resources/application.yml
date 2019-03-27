@@ -26,5 +26,10 @@ spring:
     logAbandoned: true
   redis:
     host: 59.110.243.130
+  rabbitmq:
+    host: 59.110.243.130
+    port: 5672
+    username: guest
+    password: guest
 logging:
   path: /opt/spring/log

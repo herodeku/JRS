@@ -3,13 +3,14 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/jrs-main/pom.xml" />
         <option value="$PROJECT_DIR$/jrs-es/pom.xml" />
         <option value="$PROJECT_DIR$/jrs-log/pom.xml" />
+        <option value="$PROJECT_DIR$/jrs-main/pom.xml" />
+        <option value="$PROJECT_DIR$/demo/pom.xml" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager">
+  <component name="ProjectRootManager" version="2" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>
