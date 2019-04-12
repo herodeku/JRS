@@ -1,16 +1,29 @@
 package com.graduate.jrsmain.bean;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
+import java.io.Serializable;
+
 @Document(indexName = "judgment",type = "content")
-public class Judgment {
-    private String judgeContent;
+public class Judgment implements Serializable {
+    @Id
     private String id;//文书id
+    private String judgeContent;
     private String judgeDate;
     private String judgeProcess;
     private String caseNum;//案号
     private String caseName;
     private String courtName;
-    private int caseType;
+    private String content;//具体内容
+    private String caseType;
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 
     public String getJudgeContent() {
         return judgeContent;
@@ -68,11 +81,11 @@ public class Judgment {
         this.courtName = courtName;
     }
 
-    public int getCaseType() {
+    public String getCaseType() {
         return caseType;
     }
 
-    public void setCaseType(int caseType) {
+    public void setCaseType(String caseType) {
         this.caseType = caseType;
     }
 }

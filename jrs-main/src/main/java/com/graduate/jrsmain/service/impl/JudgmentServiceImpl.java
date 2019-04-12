@@ -3,18 +3,18 @@ package com.graduate.jrsmain.service.impl;
 import com.graduate.jrsmain.bean.Judgment;
 import com.graduate.jrsmain.repository.JudgmentRepository;
 import com.graduate.jrsmain.service.JudgmentService;
-import com.graduate.jrsmain.util.LoadSource;
+import com.graduate.jrsmain.util.DateUtil;
+import com.graduate.jrsmain.util.EsUtil;
+import com.graduate.jrsmain.vo.AdvJudgment;
+import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.beans.IntrospectionException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 @Service
 public class JudgmentServiceImpl implements JudgmentService {
@@ -22,33 +22,24 @@ public class JudgmentServiceImpl implements JudgmentService {
     @Autowired
     private JudgmentRepository judgmentRepository;
 
+    @Override
+    public List<Judgment> search(String message, Pageable pageable) {
+        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+        if(DateUtil.judgeDate(message)==true){
+            boolQueryBuilder.should(QueryBuilders.matchQuery("releaseDate",message));
+        }
+        EsUtil.buildBoolQueryBuilder(boolQueryBuilder,message, new String[]{"judgeProcess", "caseNum", "caseName","courtName","judgeContent"});
+        return EsUtil.search(judgmentRepository,boolQueryBuilder,pageable);
+    }
 
     @Override
-    public List<Judgment> simpleSearch(String message, Pageable pageable) {
-        boolean convertStatus = true;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-DD-mm");
-        try {
-            simpleDateFormat.setLenient(false);
-            simpleDateFormat.parse(message);
-        }catch (ParseException e){
-            convertStatus = false;
-        }
+    public List<Judgment> advSearch(AdvJudgment advJudgment, Pageable pageable) throws InvocationTargetException, IntrospectionException, InstantiationException, IllegalAccessException {
         BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
-        if(convertStatus==true){
-            boolQueryBuilder.should(QueryBuilders.matchQuery("judgeDate",message));
+        if(StringUtils.isNotBlank(advJudgment.getJudgeDateGTE())) {
+            boolQueryBuilder.must(QueryBuilders.rangeQuery("judgeDate").gte(advJudgment.getJudgeDateGTE()).lt(advJudgment.getJudgeDateLT()));
         }
-        boolQueryBuilder.should(QueryBuilders.matchQuery("judgeProcess",message));
-        boolQueryBuilder.should(QueryBuilders.matchQuery("caseNum",message));
-        boolQueryBuilder.should(QueryBuilders.matchQuery("caseName",message));
-        boolQueryBuilder.should(QueryBuilders.matchQuery("courtName",message));
-        boolQueryBuilder.should(QueryBuilders.matchQuery("judgeContent",message));
-        Iterable<Judgment> judgments = judgmentRepository.search(boolQueryBuilder,pageable);
-        Iterator<Judgment> iterator = judgments.iterator();
-        List<Judgment> judgments1 = new ArrayList<>();
-        while (iterator.hasNext()){
-            judgments1.add(iterator.next());
-        }
-        return judgments1;
+        EsUtil.buildAdvBoolQueryBuilder(boolQueryBuilder,EsUtil.getMethod(advJudgment));
+        return EsUtil.search(judgmentRepository,boolQueryBuilder,pageable);
     }
 
     @Override
@@ -61,16 +52,16 @@ public class JudgmentServiceImpl implements JudgmentService {
         return cases;
     }
 
-    @Override
-    public void deleteAllJudgment() {
-        judgmentRepository.deleteAll();
-    }
-
-    @Override
-    public void saveCivil() {
-        List<Judgment> judementCivilCases = LoadSource.loadToCivil("C:\\Users\\hasee\\Desktop\\civil.txt");
-        for (Judgment judgment:judementCivilCases) {
-            judgmentRepository.save(judgment);
-        }
-    }
+//    @Override
+//    public void deleteAllJudgment() {
+//        judgmentRepository.deleteAll();
+//    }
+//
+//    @Override
+//    public void saveCivil() {
+//        List<Judgment> judementCivilCases = LoadSource.loadToCivil("C:\\Users\\hasee\\Desktop\\civil.txt");
+//        for (Judgment judgment:judementCivilCases) {
+//            judgmentRepository.save(judgment);
+//        }
+//    }
 }

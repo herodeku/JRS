@@ -1,16 +1,27 @@
 package com.graduate.jrses.bean;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 @Document(indexName = "judgment",type = "content")
 public class Judgment {
-    private String judgeContent;
+    @Id
     private String id;//文书id
+    private String judgeContent;//裁判内容，简情
     private String judgeDate;
     private String judgeProcess;
     private String caseNum;//案号
     private String caseName;
     private String courtName;
-    private int caseType;
+    private String content;//具体内容
+    private String caseType;
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 
     public String getJudgeContent() {
         return judgeContent;
@@ -68,11 +79,11 @@ public class Judgment {
         this.courtName = courtName;
     }
 
-    public int getCaseType() {
+    public String getCaseType() {
         return caseType;
     }
 
-    public void setCaseType(int caseType) {
+    public void setCaseType(String caseType) {
         this.caseType = caseType;
     }
 }

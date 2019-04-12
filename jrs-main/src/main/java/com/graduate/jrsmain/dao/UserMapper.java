@@ -5,6 +5,7 @@ import com.graduate.jrsmain.bean.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.dao.DataAccessException;
 
 @Mapper
 public interface UserMapper {

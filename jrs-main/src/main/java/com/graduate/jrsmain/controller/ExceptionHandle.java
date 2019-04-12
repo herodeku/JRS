@@ -3,13 +3,13 @@ package com.graduate.jrsmain.controller;
 import com.graduate.jrsmain.util.LawException;
 import com.graduate.jrsmain.util.ResultCode;
 import com.graduate.jrsmain.util.ResultUtil;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @ControllerAdvice
-
 public class ExceptionHandle {
 
     @ResponseBody
@@ -19,8 +19,13 @@ public class ExceptionHandle {
             LawException lawException = (LawException) e;
             return ResultUtil.error(lawException.getCode());
         }else if(e instanceof DuplicateKeyException){
-            return ResultUtil.error(ResultCode.DUPLICATEKEY_ERROR);
-        }else{
+            if(e.getCause().getMessage().indexOf("PRIMARY")>-1){
+                return ResultUtil.error(ResultCode.DUPLICATEKEY_ERROR);
+            }else {
+                return ResultUtil.error(ResultCode.DUPLICATEPHONE_ERROR);
+            }
+        }
+        else{
             return ResultUtil.error(ResultCode.SYSERROR);
         }
     }

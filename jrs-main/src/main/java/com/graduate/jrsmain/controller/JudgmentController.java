@@ -1,9 +1,10 @@
 package com.graduate.jrsmain.controller;
 
 import com.graduate.jrsmain.bean.LawUser;
-import com.graduate.jrsmain.repository.JudgmentRepository;
 import com.graduate.jrsmain.service.JudgmentService;
 import com.graduate.jrsmain.util.ResultUtil;
+import com.graduate.jrsmain.vo.AdvJudgment;
+import com.graduate.jrsmain.vo.JudgmentVO;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.beans.IntrospectionException;
+import java.lang.reflect.InvocationTargetException;
+
 
 @RestController
 @RequestMapping("/Judgment")
@@ -19,14 +23,11 @@ import springfox.documentation.annotations.ApiIgnore;
 public class JudgmentController {
 
     @Autowired
-    private JudgmentRepository judgmentRepository;
+    private JudgmentService judgmentServiceImpl;
 
-    @Autowired
-    private JudgmentService judgmentService;
+    private Logger logger = LoggerFactory.getLogger(JudgmentController.class);
 
-    Logger logger = LoggerFactory.getLogger(JudgmentController.class);
-
-    @ApiOperation(value = "简单查询")
+    @ApiOperation(value = "基础检索")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", dataType = "String", name = "access_token", required = true) })
     @GetMapping("/simpleSearch/{message}/{page}/{size}")
@@ -35,23 +36,33 @@ public class JudgmentController {
             @ApiParam(name = "page", value = "第page页（从0开始）", required = true)@PathVariable Integer page,
             @ApiParam(name = "size", value = "每页size条数据", required = true)@PathVariable Integer size,
             @ApiIgnore @RequestAttribute(name = "user") LawUser user){
-            logger.info("Search-Judgement"+"Authority:"+user.getAuthority()+"Message:"+message);
+        logger.info("Search-Judgement"+"Authority:"+user.getAuthority()+"Message:"+message);
         PageRequest pageRequest = new PageRequest(page, size);
-        return ResultUtil.success(judgmentService.simpleSearch(message,pageRequest));
+        return ResultUtil.success(judgmentServiceImpl.search(message,pageRequest));
     }
-
-    @ApiOperation(value = "获取所有文书")
-    @GetMapping("getAllJudgment")
-    public ResultUtil getAllJudgment(){
-        return ResultUtil.success(judgmentService.getAllJudgment());
+    @ApiOperation(value = "高级检索")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "String", name = "access_token", required = true) })
+    @PostMapping("/advSearch")
+    public ResultUtil advSearch(
+            @ApiParam(name = "message", value = "检索条件", required = true)@RequestBody JudgmentVO judgmentVO,
+            @ApiIgnore @RequestAttribute(name = "user") LawUser user) throws IntrospectionException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        logger.info("Search-Judgement"+"Authority:"+user.getAuthority()+"Message:"+ judgmentVO.getAdvJudgment().getJudgeContent());
+        PageRequest pageRequest = new PageRequest(judgmentVO.getPage(), judgmentVO.getSize());
+        return ResultUtil.success(judgmentServiceImpl.advSearch(judgmentVO.getAdvJudgment(),pageRequest));
     }
-
-    @GetMapping("deleteAllJudgment")
-    public void deleteAllJudgment(){
-        judgmentService.deleteAllJudgment();
-    }
-    @GetMapping("/saveJudgment")
-    public void saveCivil(){
-        judgmentService.saveCivil();
-    }
+//    @ApiOperation(value = "获取所有文书")
+//    @GetMapping("getAllJudgment")
+//    public ResultUtil getAllJudgment(){
+//        return ResultUtil.success(judgmentService.getAllJudgment());
+//    }
+//
+//    @GetMapping("deleteAllJudgment")
+//    public void deleteAllJudgment(){
+//        judgmentService.deleteAllJudgment();
+//    }
+//    @GetMapping("/saveJudgment")
+//    public void saveCivil(){
+//        judgmentService.saveCivil();
+//    }
 }

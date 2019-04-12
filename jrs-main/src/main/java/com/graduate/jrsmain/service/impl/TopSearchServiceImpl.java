@@ -41,8 +41,10 @@ public class TopSearchServiceImpl implements TopSearchService {
         }
         getLogMessage(list,objects);
         int objSize = objects.size();
+
         if(objSize<showNum){
-            for (int i=0;i<showNum-objSize;i++){
+            int jSize = judgmentServiceImpl.getAllJudgment().size();
+            for (int i=0;i<(showNum-objSize>jSize?jSize:showNum-objSize);i++){
                 objects.add(judgmentServiceImpl.getAllJudgment().get(i));
                 //如果没有大于showNum则从所有索引中找出size2个值补齐
             }
@@ -52,10 +54,10 @@ public class TopSearchServiceImpl implements TopSearchService {
 
     public void  getLogMessage(List<String> list,List<Object> objects){
         for (String string:list){
-            objects.add(judgmentServiceImpl.simpleSearch(string,new PageRequest(0,1)).get(0));
-            objects.add(executionServiceImpl.simpleSearch(string,new PageRequest(0,1)).get(0));
-            objects.add(processServiceImpl.simpleSearch(string,new PageRequest(0,1)).get(0));
-            objects.add(videoServiceImpl.simpleSearch(string,new PageRequest(0,1)).get(0));
+            objects.add(judgmentServiceImpl.search(string,new PageRequest(0,1)).get(0));
+//            objects.add(executionServiceImpl.simpleSearch(string,new PageRequest(0,1)).get(0));
+//            objects.add(processServiceImpl.simpleSearch(string,new PageRequest(0,1)).get(0));
+//            objects.add(videoServiceImpl.simpleSearch(string,new PageRequest(0,1)).get(0));
         }
     }
 }

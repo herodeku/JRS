@@ -1,10 +1,10 @@
 package com.graduate.jrses.controller;
 
-import com.graduate.jrses.repository.VideoRepository;
+import com.graduate.jrses.bean.Video;
+import com.graduate.jrses.service.VideoService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/Video")
@@ -12,5 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class VideoController {
 
     @Autowired
-    private VideoRepository videoRepository;
+    private VideoService videoServiceImpl;
+
+    @PostMapping("/StoreIndex")
+    public String store(@RequestBody Video video){
+        return videoServiceImpl.storeIndex(video);
+    }
+
 }

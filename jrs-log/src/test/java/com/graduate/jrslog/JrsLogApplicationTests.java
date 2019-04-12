@@ -19,10 +19,10 @@ public class JrsLogApplicationTests {
     @Test
     public void contextLoads() {
         ArrayList<String> list = new ArrayList<>();
-        list.add("厦门");
-        list.add("襄阳");
-        list.add("天成");
-        list.add("莆田");
+        list.add("鹿晗");
+        list.add("蔡徐坤");
+        list.add("无敌");
+        list.add("2015");
         rabbitTemplate.convertAndSend("Exchange.populace","Queue.populace",list);
     }
 

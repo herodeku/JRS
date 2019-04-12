@@ -32,4 +32,4 @@ spring:
     username: guest
     password: guest
 logging:
-  path: /opt/spring/log
+  path: /opt/JRS/spring/log

@@ -7,6 +7,7 @@ import com.graduate.jrsmain.service.UserService;
 import com.graduate.jrsmain.util.LawException;
 import com.graduate.jrsmain.util.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
