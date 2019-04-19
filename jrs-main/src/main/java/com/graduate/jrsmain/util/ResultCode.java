@@ -6,6 +6,7 @@ public enum ResultCode {
     DUPLICATEKEY_ERROR("0002","用户名重复"),
     DUPLICATEPHONE_ERROR("0003","手机号重复"),
     REGISTER_ERROR("0004","注册失败"),
+    INDEX_NOT_FOUND("0005","索引不存在"),
     SYSERROR("1111","未知异常");
     private String code;
     private String message;

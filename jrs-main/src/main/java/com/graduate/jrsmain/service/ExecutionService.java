@@ -5,5 +5,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface ExecutionService {
-    List<Execution> simpleSearch(String message, Pageable pageable);
+    Execution findOne(String id);
+    List<Execution> search(String message, Pageable pageable);
 }

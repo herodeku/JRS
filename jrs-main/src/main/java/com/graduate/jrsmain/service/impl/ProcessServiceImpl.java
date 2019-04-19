@@ -1,13 +1,8 @@
 package com.graduate.jrsmain.service.impl;
 
-import com.graduate.jrsmain.bean.ProcessCase;
-import com.graduate.jrsmain.bean.ProcessGuide;
-import com.graduate.jrsmain.bean.ProcessTrialReport;
-import com.graduate.jrsmain.repository.ProcessCaseRepository;
-import com.graduate.jrsmain.repository.ProcessGuideRepository;
-import com.graduate.jrsmain.repository.ProcessTrialReportRepository;
+import com.graduate.jrsmain.bean.Process;
+import com.graduate.jrsmain.repository.ProcessRepository;
 import com.graduate.jrsmain.service.ProcessService;
-import com.graduate.jrsmain.util.DateUtil;
 import com.graduate.jrsmain.util.EsUtil;
 import com.graduate.jrsmain.vo.AdvProcess;
 import org.apache.commons.lang.StringUtils;
@@ -24,58 +19,30 @@ import java.util.List;
 public class ProcessServiceImpl implements ProcessService {
 
     @Autowired
-    private ProcessCaseRepository processCaseRepository;
-
-    @Autowired
-    private ProcessTrialReportRepository processTrialReportRepository;
-
-    @Autowired
-    private ProcessGuideRepository processGuideRepository;
-
+    private ProcessRepository processRepository;
 
     @Override
-    public List<ProcessGuide> searchGuide(String message, Pageable pageable) {
-        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
-        if(DateUtil.judgeDate(message) ==true){
-            boolQueryBuilder.should(QueryBuilders.matchQuery("judgeDate",message));
-        }
-        EsUtil.buildBoolQueryBuilder(boolQueryBuilder,message, new String[]{"filename", "province", "unit"});
-        return EsUtil.search(processGuideRepository,boolQueryBuilder,pageable);
+    public Process findOne(String id) {
+        return processRepository.findOne(id);
     }
 
     @Override
-    public List<ProcessCase> searchCase(String message, Pageable pageable) {
+    public List<Process>  search(String message, Pageable pageable) {
         BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
-        if(DateUtil.judgeDate(message) ==true){
-            boolQueryBuilder.should(QueryBuilders.matchQuery("judgeDate",message));
-        }
-        EsUtil.buildBoolQueryBuilder(boolQueryBuilder,message, new String[]{"filename", "unit", "content"});
-        return EsUtil.search(processCaseRepository,boolQueryBuilder,pageable);
+//        if(DateUtil.judgeDate(message) ==true){
+//            boolQueryBuilder.should(QueryBuilders.matchQuery("judgeDate",message));
+//        }
+        EsUtil.buildBoolQueryBuilder(boolQueryBuilder,message, new String[]{"filename","content"});
+        return EsUtil.search(processRepository,boolQueryBuilder,pageable);
     }
 
     @Override
-    public List<ProcessTrialReport> searchTriaReport(String message, Pageable pageable) {
-        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
-        if(DateUtil.judgeDate(message) ==true){
-            boolQueryBuilder.should(QueryBuilders.matchQuery("judgeDate",message));
-        }
-        EsUtil.buildBoolQueryBuilder(boolQueryBuilder,message, new String[]{"filename", "caseType", "province", "unit", "content"});
-        return EsUtil.search(processTrialReportRepository,boolQueryBuilder,pageable);
-    }
-
-    @Override
-    public Object advSearch(AdvProcess advProcess, Pageable pageable, Integer type) throws InvocationTargetException, IntrospectionException, InstantiationException, IllegalAccessException {
+    public List<Process> advSearch(AdvProcess advProcess, Pageable pageable) throws InvocationTargetException, IntrospectionException, InstantiationException, IllegalAccessException {
         BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
         if(StringUtils.isNotBlank(advProcess.getReleaseDateGTE())){
             boolQueryBuilder.must(QueryBuilders.rangeQuery("releaseDate").gte(advProcess.getReleaseDateGTE()).lt(advProcess.getReleaseDateLT()));
         }
         EsUtil.buildAdvBoolQueryBuilder(boolQueryBuilder,EsUtil.getMethod(advProcess));
-        if(type==0){
-            return EsUtil.search(processCaseRepository,boolQueryBuilder,pageable);
-        }else if(type==1){
-            return EsUtil.search(processGuideRepository,boolQueryBuilder,pageable);
-        }else {
-            return EsUtil.search(processTrialReportRepository,boolQueryBuilder,pageable);
-        }
+        return EsUtil.search(processRepository,boolQueryBuilder,pageable);
     }
 }

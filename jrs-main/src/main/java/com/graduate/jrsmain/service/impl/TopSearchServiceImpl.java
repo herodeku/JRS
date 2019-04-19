@@ -43,11 +43,11 @@ public class TopSearchServiceImpl implements TopSearchService {
         int objSize = objects.size();
 
         if(objSize<showNum){
-            int jSize = judgmentServiceImpl.getAllJudgment().size();
-            for (int i=0;i<(showNum-objSize>jSize?jSize:showNum-objSize);i++){
-                objects.add(judgmentServiceImpl.getAllJudgment().get(i));
-                //如果没有大于showNum则从所有索引中找出size2个值补齐
-            }
+//            int jSize = judgmentServiceImpl.getAllJudgment().size();
+//            for (int i=0;i<(showNum-objSize>jSize?jSize:showNum-objSize);i++){
+//                objects.add(judgmentServiceImpl.getAllJudgment().get(i));
+//                //如果没有大于showNum则从所有索引中找出size2个值补齐
+//            }
         }
         return objects;
     }

@@ -27,6 +27,16 @@ public class JudgmentController {
 
     private Logger logger = LoggerFactory.getLogger(JudgmentController.class);
 
+    @ApiOperation(value = "根据Id查找索引")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "String", name = "access_token", required = true) })
+    @GetMapping("/findOne/{id}")
+    public ResultUtil findOne(
+            @ApiParam(name = "id", value = "id", required = true)@PathVariable String id,
+            @ApiIgnore @RequestAttribute(name = "user") LawUser user){
+        return ResultUtil.success(judgmentServiceImpl.findOne(id));
+    }
+
     @ApiOperation(value = "基础检索")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", dataType = "String", name = "access_token", required = true) })
@@ -40,6 +50,7 @@ public class JudgmentController {
         PageRequest pageRequest = new PageRequest(page, size);
         return ResultUtil.success(judgmentServiceImpl.search(message,pageRequest));
     }
+
     @ApiOperation(value = "高级检索")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", dataType = "String", name = "access_token", required = true) })
@@ -55,14 +66,5 @@ public class JudgmentController {
 //    @GetMapping("getAllJudgment")
 //    public ResultUtil getAllJudgment(){
 //        return ResultUtil.success(judgmentService.getAllJudgment());
-//    }
-//
-//    @GetMapping("deleteAllJudgment")
-//    public void deleteAllJudgment(){
-//        judgmentService.deleteAllJudgment();
-//    }
-//    @GetMapping("/saveJudgment")
-//    public void saveCivil(){
-//        judgmentService.saveCivil();
 //    }
 }

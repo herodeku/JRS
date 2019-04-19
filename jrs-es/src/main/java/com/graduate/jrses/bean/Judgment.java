@@ -2,7 +2,7 @@ package com.graduate.jrses.bean;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
-@Document(indexName = "judgment",type = "content")
+@Document(indexName = "judgment",type = "message")
 public class Judgment {
     @Id
     private String id;//文书id

@@ -5,6 +5,8 @@ import com.graduate.jrsmain.repository.JudgmentRepository;
 import com.graduate.jrsmain.service.JudgmentService;
 import com.graduate.jrsmain.util.DateUtil;
 import com.graduate.jrsmain.util.EsUtil;
+import com.graduate.jrsmain.util.LawException;
+import com.graduate.jrsmain.util.ResultCode;
 import com.graduate.jrsmain.vo.AdvJudgment;
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -43,25 +45,21 @@ public class JudgmentServiceImpl implements JudgmentService {
     }
 
     @Override
-    public List<Judgment> getAllJudgment() {
-        List<Judgment> cases = new ArrayList<>();
-        Iterator<Judgment> iterator = judgmentRepository.findAll().iterator();
-        while (iterator.hasNext()){
-            cases.add(iterator.next());
+    public Judgment findOne(String id) {
+        Judgment one = judgmentRepository.findOne(id);
+        if(one==null){
+            throw new LawException(ResultCode.INDEX_NOT_FOUND);
         }
-        return cases;
+        return one;
     }
 
 //    @Override
-//    public void deleteAllJudgment() {
-//        judgmentRepository.deleteAll();
-//    }
-//
-//    @Override
-//    public void saveCivil() {
-//        List<Judgment> judementCivilCases = LoadSource.loadToCivil("C:\\Users\\hasee\\Desktop\\civil.txt");
-//        for (Judgment judgment:judementCivilCases) {
-//            judgmentRepository.save(judgment);
+//    public List<Judgment> getAllJudgment() {
+//        List<Judgment> cases = new ArrayList<>();
+//        Iterator<Judgment> iterator = judgmentRepository.findAll().iterator();
+//        while (iterator.hasNext()){
+//            cases.add(iterator.next());
 //        }
+//        return cases;
 //    }
 }

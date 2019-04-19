@@ -11,7 +11,7 @@ import java.util.List;
 public interface JudgmentService {
     List<Judgment> search(String message, Pageable pageable);
     List<Judgment> advSearch(AdvJudgment advJudgment, Pageable pageable) throws InvocationTargetException, IntrospectionException, InstantiationException, IllegalAccessException;
-    List<Judgment> getAllJudgment();
+    Judgment findOne(String id);
 //    void deleteAllJudgment();
 //    void saveCivil();
 }

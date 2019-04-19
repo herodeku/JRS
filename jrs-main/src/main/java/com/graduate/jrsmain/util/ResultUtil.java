@@ -29,6 +29,7 @@ public class ResultUtil {
     public void setData(Object data) {
         this.data = data;
     }
+
     public static ResultUtil error(ResultCode code){
         ResultUtil resultUtil = new ResultUtil();
         resultUtil.setCode(code.getCode());
