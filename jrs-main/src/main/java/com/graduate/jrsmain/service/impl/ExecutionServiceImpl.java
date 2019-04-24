@@ -26,8 +26,11 @@ public class ExecutionServiceImpl implements ExecutionService {
 
     @Override
     public List<Execution> search(String message, Pageable pageable) {
-        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
-        EsUtil.buildBoolQueryBuilder(boolQueryBuilder,message, new String[]{"title", "content"});
-        return EsUtil.search(executionRepository,boolQueryBuilder,pageable);
+        return EsUtil.search(executionRepository,EsUtil.createExecutionBoolQueryBuilder(message),pageable);
+    }
+
+    @Override
+    public Integer searchNum(String message) {
+        return EsUtil.searchNum(executionRepository,EsUtil.createExecutionBoolQueryBuilder(message));
     }
 }

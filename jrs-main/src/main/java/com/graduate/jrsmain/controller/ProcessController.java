@@ -61,4 +61,22 @@ public class ProcessController {
         PageRequest pageRequest = new PageRequest(processVO.getPage(), processVO.getSize());
         return ResultUtil.success(processServiceImpl.advSearch(processVO.getAdvProcess(),pageRequest));
     }
+    @ApiOperation(value = "基础检索到的总数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "String", name = "access_token", required = true) })
+    @GetMapping("/simpleSearchNum/{message}")
+    public ResultUtil simpleSearchNum(
+            @ApiParam(name = "message", value = "查询内容", required = true)@PathVariable String message,
+            @ApiIgnore @RequestAttribute(name = "user") LawUser user){
+        return ResultUtil.success(processServiceImpl.searchNum(message));
+    }
+    @ApiOperation(value = "高级检索到的总数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "String", name = "access_token", required = true) })
+    @PostMapping("/advSearchNum")
+    public ResultUtil advSearchNum(
+            @ApiParam(name = "message", value = "检索条件", required = true)@RequestBody ProcessVO processVO,
+            @ApiIgnore @RequestAttribute(name = "user") LawUser user){
+        return ResultUtil.success(processServiceImpl.advSearchNum(processVO.getAdvProcess()));
+    }
 }

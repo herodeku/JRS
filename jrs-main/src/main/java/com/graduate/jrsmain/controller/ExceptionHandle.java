@@ -5,6 +5,7 @@ import com.graduate.jrsmain.util.ResultCode;
 import com.graduate.jrsmain.util.ResultUtil;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,8 +25,11 @@ public class ExceptionHandle {
             }else {
                 return ResultUtil.error(ResultCode.DUPLICATEPHONE_ERROR);
             }
+        }else if(e instanceof HttpMessageNotReadableException){
+            return ResultUtil.error(ResultCode.MESSAGE_NOT_READABLE);
         }
         else{
+            e.printStackTrace();
             return ResultUtil.error(ResultCode.SYSERROR);
         }
     }

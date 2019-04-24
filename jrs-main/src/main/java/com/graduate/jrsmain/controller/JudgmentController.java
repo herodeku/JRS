@@ -57,14 +57,30 @@ public class JudgmentController {
     @PostMapping("/advSearch")
     public ResultUtil advSearch(
             @ApiParam(name = "message", value = "检索条件", required = true)@RequestBody JudgmentVO judgmentVO,
-            @ApiIgnore @RequestAttribute(name = "user") LawUser user) throws IntrospectionException, InstantiationException, IllegalAccessException, InvocationTargetException {
+            @ApiIgnore @RequestAttribute(name = "user") LawUser user){
         logger.info("Search-Judgement"+"Authority:"+user.getAuthority()+"Message:"+ judgmentVO.getAdvJudgment().getJudgeContent());
         PageRequest pageRequest = new PageRequest(judgmentVO.getPage(), judgmentVO.getSize());
         return ResultUtil.success(judgmentServiceImpl.advSearch(judgmentVO.getAdvJudgment(),pageRequest));
     }
-//    @ApiOperation(value = "获取所有文书")
-//    @GetMapping("getAllJudgment")
-//    public ResultUtil getAllJudgment(){
-//        return ResultUtil.success(judgmentService.getAllJudgment());
-//    }
+
+    @ApiOperation(value = "基础检索到的总数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "String", name = "access_token", required = true) })
+    @GetMapping("/simpleSearchNum/{message}")
+    public ResultUtil simpleSearchNum(
+            @ApiParam(name = "message", value = "查询内容", required = true)@PathVariable String message,
+            @ApiIgnore @RequestAttribute(name = "user") LawUser user){
+        return ResultUtil.success(judgmentServiceImpl.searchNum(message));
+    }
+
+    @ApiOperation(value = "高级检索到的总数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "String", name = "access_token", required = true) })
+    @PostMapping("/advSearchNum")
+    public ResultUtil advSearchNum(
+            @ApiParam(name = "message", value = "检索条件", required = true)@RequestBody JudgmentVO judgmentVO,
+            @ApiIgnore @RequestAttribute(name = "user") LawUser user){
+        return ResultUtil.success(judgmentServiceImpl.advSearchNum(judgmentVO.getAdvJudgment()));
+    }
+
 }

@@ -10,8 +10,10 @@ import java.util.List;
 
 public interface JudgmentService {
     List<Judgment> search(String message, Pageable pageable);
-    List<Judgment> advSearch(AdvJudgment advJudgment, Pageable pageable) throws InvocationTargetException, IntrospectionException, InstantiationException, IllegalAccessException;
+    List<Judgment> advSearch(AdvJudgment advJudgment, Pageable pageable);
     Judgment findOne(String id);
+    Integer searchNum(String message);
+    Integer advSearchNum(AdvJudgment advJudgment);
 //    void deleteAllJudgment();
 //    void saveCivil();
 }
