@@ -1,11 +1,12 @@
 package com.graduate.jrsmain.service.impl;
 
+import com.graduate.jrsmain.bean.History;
 import com.graduate.jrsmain.bean.Process;
 import com.graduate.jrsmain.repository.ProcessRepository;
 import com.graduate.jrsmain.service.ProcessService;
 import com.graduate.jrsmain.util.EsUtil;
+import com.graduate.jrsmain.util.PublicUtil;
 import com.graduate.jrsmain.vo.AdvProcess;
-import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,9 +18,16 @@ public class ProcessServiceImpl implements ProcessService {
     @Autowired
     private ProcessRepository processRepository;
 
+    @Autowired
+    private PublicUtil publicUtil;
+
     @Override
-    public Process findOne(String id) {
-        return processRepository.findOne(id);
+    public Process findOne(String id,String username,boolean b) {
+        Process one = processRepository.findOne(id);
+        if(b==true){
+            publicUtil.storeHistory(one, id,username , this.getClass());
+        }
+        return one;
     }
 
     @Override

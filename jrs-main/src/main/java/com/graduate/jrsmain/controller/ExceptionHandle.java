@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Date;
+
 @ControllerAdvice
 public class ExceptionHandle {
 
@@ -32,5 +34,9 @@ public class ExceptionHandle {
             e.printStackTrace();
             return ResultUtil.error(ResultCode.SYSERROR);
         }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Date().getTime());
     }
 }

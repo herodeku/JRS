@@ -9,7 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public interface ProcessService {
-    Process findOne(String id);
+    Process findOne(String id,String username,boolean b);
     List<Process> search(String message, Pageable pageable);
     List<Process> advSearch(AdvProcess advProcess, Pageable pageable);
     Integer searchNum(String message);

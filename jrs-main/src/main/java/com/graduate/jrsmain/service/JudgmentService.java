@@ -11,9 +11,7 @@ import java.util.List;
 public interface JudgmentService {
     List<Judgment> search(String message, Pageable pageable);
     List<Judgment> advSearch(AdvJudgment advJudgment, Pageable pageable);
-    Judgment findOne(String id);
+    Judgment findOne(String id,String username,boolean b);
     Integer searchNum(String message);
     Integer advSearchNum(AdvJudgment advJudgment);
-//    void deleteAllJudgment();
-//    void saveCivil();
 }

@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface VideoService {
-    Video findOne(String id);
+    Video findOne(String id,String username,boolean b);
     List<Video> search(String message, Pageable pageable);
     //List<Video> advSearch(AdvJudgment advJudgment, Pageable pageable);
 }

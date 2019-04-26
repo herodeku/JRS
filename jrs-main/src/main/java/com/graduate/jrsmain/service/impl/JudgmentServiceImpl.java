@@ -4,14 +4,11 @@ import com.graduate.jrsmain.bean.Judgment;
 import com.graduate.jrsmain.repository.JudgmentRepository;
 import com.graduate.jrsmain.service.JudgmentService;
 import com.graduate.jrsmain.util.EsUtil;
-import com.graduate.jrsmain.util.LawException;
-import com.graduate.jrsmain.util.ResultCode;
+import com.graduate.jrsmain.util.PublicUtil;
 import com.graduate.jrsmain.vo.AdvJudgment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import java.beans.IntrospectionException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 @Service
@@ -20,13 +17,14 @@ public class JudgmentServiceImpl implements JudgmentService {
     @Autowired
     private JudgmentRepository judgmentRepository;
 
-    private static Integer messageNum;
+    @Autowired
+    private PublicUtil publicUtil;
 
     @Override
-    public Judgment findOne(String id) {
+    public Judgment findOne(String id,String username,boolean b) {
         Judgment one = judgmentRepository.findOne(id);
-        if(one==null){
-            throw new LawException(ResultCode.INDEX_NOT_FOUND);
+        if(b==true){
+            publicUtil.storeHistory(one, id,username , this.getClass());
         }
         return one;
     }

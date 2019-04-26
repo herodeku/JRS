@@ -3,6 +3,7 @@ package com.graduate.jrsmain.controller;
 import com.graduate.jrsmain.bean.LawUser;
 import com.graduate.jrsmain.repository.ExecutionRepository;
 import com.graduate.jrsmain.service.ExecutionService;
+import com.graduate.jrsmain.util.PublicUtil;
 import com.graduate.jrsmain.util.ResultUtil;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
@@ -29,7 +30,7 @@ public class ExecutionController {
     public ResultUtil findOne(
             @ApiParam(name = "id", value = "id", required = true)@PathVariable String id,
             @ApiIgnore @RequestAttribute(name = "user") LawUser user) {
-        return ResultUtil.success(executionServiceImpl.findOne(id));
+        return ResultUtil.success(executionServiceImpl.findOne(id,user.getUsername(),true));
     }
 
     @ApiOperation(value = "基础检索")

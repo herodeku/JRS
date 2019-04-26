@@ -8,6 +8,8 @@ public enum ResultCode {
     REGISTER_ERROR("0004","注册失败"),
     INDEX_NOT_FOUND("0005","索引不存在"),
     MESSAGE_NOT_READABLE("0006","消息格式错误"),
+    HISTORY_NOT_STORE("0007","历史纪录没有被记录"),
+    HISTORY_NOT_DELETE("0008","历史纪录删除错误"),
     SYSERROR("1111","未知异常");
     private String code;
     private String message;

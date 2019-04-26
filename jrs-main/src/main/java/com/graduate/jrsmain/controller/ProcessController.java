@@ -33,7 +33,7 @@ public class ProcessController {
     public ResultUtil findOne(
             @ApiParam(name = "id", value = "id", required = true)@PathVariable String id,
             @ApiIgnore @RequestAttribute(name = "user") LawUser user) {
-        return ResultUtil.success(processServiceImpl.findOne(id));
+        return ResultUtil.success(processServiceImpl.findOne(id,user.getUsername(),true));
     }
 
     @ApiOperation(value = "基础检索")

@@ -9,6 +9,7 @@ import org.springframework.dao.DataAccessException;
 
 @Mapper
 public interface UserMapper {
+
     @Select("select * from USER where username=#{s}")
     public User getUserByUserName(String s);
 

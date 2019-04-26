@@ -28,7 +28,7 @@ public class VideoController {
     public ResultUtil findOne(
             @ApiParam(name = "id", value = "id", required = true)@PathVariable String id,
             @ApiIgnore @RequestAttribute(name = "user") LawUser user) {
-        return ResultUtil.success(videoServiceImpl.findOne(id));
+        return ResultUtil.success(videoServiceImpl.findOne(id,user.getUsername(),true));
     }
 
     @ApiOperation(value = "基础检索")
