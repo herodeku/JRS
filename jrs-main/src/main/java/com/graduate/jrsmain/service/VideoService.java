@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface VideoService {
     Video findOne(String id,String username,boolean b);
+    List<Video> findAll(Pageable pageable);
     List<Video> search(String message, Pageable pageable);
     //List<Video> advSearch(AdvJudgment advJudgment, Pageable pageable);
 }

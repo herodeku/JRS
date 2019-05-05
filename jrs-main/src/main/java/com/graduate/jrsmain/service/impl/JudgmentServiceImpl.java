@@ -30,6 +30,11 @@ public class JudgmentServiceImpl implements JudgmentService {
     }
 
     @Override
+    public List<Judgment> findAll(Pageable pageable) {
+        return EsUtil.search(judgmentRepository, null,pageable);
+    }
+
+    @Override
     public List<Judgment> search(String message, Pageable pageable) {
         return EsUtil.search(judgmentRepository,EsUtil.createJudgmentBoolQueryBuilder(message),pageable);
     }

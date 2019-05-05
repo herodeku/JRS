@@ -7,7 +7,19 @@ import java.io.IOException;
 import java.util.*;
 
 public class AnalyzeUtil{
-
+    public static List<String> analyzeMessage(String message){
+        ArrayList<String> list = new ArrayList<>();
+        int authorityIndex = message.indexOf("Authority:");
+        int userNameIndex = message.indexOf("UserName:");
+        int messageIndex = message.indexOf("Message:");
+        String authority = message.substring(authorityIndex+10,userNameIndex-1);
+        String username = message.substring(userNameIndex+9,messageIndex-1);
+        String searchMessage = message.substring(messageIndex+8);
+        list.add(username);
+        list.add(searchMessage);
+        list.add(authority);
+        return list;
+    }
     public static List<List<String>> analyzeLog() throws IOException {
         ArrayList<String> populaceList = new ArrayList<>();
         ArrayList<String> judicialOfficerList = new ArrayList<>();

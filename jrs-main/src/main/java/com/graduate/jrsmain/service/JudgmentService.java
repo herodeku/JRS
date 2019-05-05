@@ -9,9 +9,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public interface JudgmentService {
+    Judgment findOne(String id,String username,boolean b);
+    List<Judgment> findAll(Pageable pageable);
     List<Judgment> search(String message, Pageable pageable);
     List<Judgment> advSearch(AdvJudgment advJudgment, Pageable pageable);
-    Judgment findOne(String id,String username,boolean b);
     Integer searchNum(String message);
     Integer advSearchNum(AdvJudgment advJudgment);
 }
