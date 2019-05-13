@@ -46,13 +46,4 @@ public class ExecutionController {
         PageRequest pageRequest = new PageRequest(page, size);
         return ResultUtil.success(executionServiceImpl.search(message,pageRequest));
     }
-    @ApiOperation(value = "基础检索到的条数")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", dataType = "String", name = "access_token", required = true) })
-    @GetMapping("/simpleSearchNum/{message}")
-    public ResultUtil simpleSearchNum(
-            @ApiParam(name = "message", value = "查询内容", required = true)@PathVariable String message,
-            @ApiIgnore @RequestAttribute(name = "user") LawUser user){
-        return ResultUtil.success(executionServiceImpl.searchNum(message));
-    }
 }

@@ -7,5 +7,4 @@ import java.util.List;
 public interface ExecutionService {
     Execution findOne(String id,String username,boolean b);
     List<Execution> search(String message, Pageable pageable);
-    Integer searchNum(String message);
 }

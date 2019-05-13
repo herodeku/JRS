@@ -1,7 +1,9 @@
 package com.graduate.jrsmain.controller;
 
 import com.graduate.jrsmain.bean.LawUser;
+import com.graduate.jrsmain.repository.VideoRepository;
 import com.graduate.jrsmain.service.VideoService;
+import com.graduate.jrsmain.service.impl.VideoServiceImpl;
 import com.graduate.jrsmain.util.ResultUtil;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
@@ -10,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
+
+import java.io.File;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/Video")

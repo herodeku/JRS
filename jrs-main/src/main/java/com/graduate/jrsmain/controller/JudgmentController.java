@@ -34,7 +34,7 @@ public class JudgmentController {
     public ResultUtil findOne(
             @ApiParam(name = "id", value = "id", required = true)@PathVariable String id,
             @ApiIgnore @RequestAttribute(name = "user") LawUser user){
-        return ResultUtil.success(judgmentServiceImpl.findOne(id,user.getUsername(),true));
+        return ResultUtil.success(judgmentServiceImpl.findOne(id));
     }
 
     @ApiOperation(value = "基础检索")
@@ -82,4 +82,5 @@ public class JudgmentController {
             @ApiIgnore @RequestAttribute(name = "user") LawUser user){
         return ResultUtil.success(judgmentServiceImpl.advSearchNum(judgmentVO.getAdvJudgment()));
     }
+
 }
