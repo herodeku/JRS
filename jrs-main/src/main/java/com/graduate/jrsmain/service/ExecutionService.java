@@ -8,4 +8,5 @@ public interface ExecutionService {
     Execution findOne(String id,String username,boolean b);
     List<Execution> findAll(Pageable pageable);
     List<Execution> search(String message, Pageable pageable);
+    Integer searchNum(String message);
 }

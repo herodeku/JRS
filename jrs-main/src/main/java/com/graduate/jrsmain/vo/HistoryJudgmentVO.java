@@ -6,10 +6,20 @@ public class HistoryJudgmentVO{
 
     private Judgment judgment;
     private String from;
+    private Long triggerTime;
 
-    public HistoryJudgmentVO(Judgment judgment, String from) {
+    public HistoryJudgmentVO(Judgment judgment, String from, Long triggerTime) {
         this.judgment = judgment;
         this.from = from;
+        this.triggerTime = triggerTime;
+    }
+
+    public Long getTriggerTime() {
+        return triggerTime;
+    }
+
+    public void setTriggerTime(Long triggerTime) {
+        this.triggerTime = triggerTime;
     }
 
     public String getFrom() {

@@ -1,7 +1,7 @@
 package com.graduate.jrses.bean;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.*;
 
 @Document(indexName = "process",type = "message")
 public class Process {
@@ -9,18 +9,30 @@ public class Process {
     private String id;
     private String fileName;
     private String caseType;
+    @Field(type = FieldType.String,index = FieldIndex.not_analyzed)
     private String province;
     private String unit;
     private String releaseDate;
     private String content;
-    private String programa;
+    @Field(type = FieldType.String,index = FieldIndex.not_analyzed)
+    private String programme;
+    @Field(type = FieldType.Date,format = DateFormat.year)
+    private String year;
 
-    public String getPrograma() {
-        return programa;
+    public String getYear() {
+        return year;
     }
 
-    public void setPrograma(String programa) {
-        this.programa = programa;
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getProgramme() {
+        return programme;
+    }
+
+    public void setProgramme(String programme) {
+        this.programme = programme;
     }
 
     public String getId() {

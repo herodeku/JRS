@@ -6,10 +6,20 @@ public class HistoryProcessVO {
 
     private Process process;
     private String from;
+    private Long triggerTime;
 
-    public HistoryProcessVO(Process process, String from) {
+    public HistoryProcessVO(Process process, String from, Long triggerTime) {
         this.process = process;
         this.from = from;
+        this.triggerTime = triggerTime;
+    }
+
+    public Long getTriggerTime() {
+        return triggerTime;
+    }
+
+    public void setTriggerTime(Long triggerTime) {
+        this.triggerTime = triggerTime;
     }
 
     public Process getProcess() {

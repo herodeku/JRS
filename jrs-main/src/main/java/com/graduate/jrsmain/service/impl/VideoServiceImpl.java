@@ -39,11 +39,6 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public List<Video> search(String message, Pageable pageable) {
-        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
-//        if(DateUtil.judgeDate(message)==true){
-//            boolQueryBuilder.should(QueryBuilders.matchQuery("beginTime",message));
-//        }
-        EsUtil.buildBoolQueryBuilder(boolQueryBuilder,message, new String[]{"courtName", "caseNo", "title","description","judge"});
-        return EsUtil.search(videoRepository,boolQueryBuilder,pageable);
+        return EsUtil.search(videoRepository,EsUtil.createVideoBoolQueryBuilder(message),pageable);
     }
 }

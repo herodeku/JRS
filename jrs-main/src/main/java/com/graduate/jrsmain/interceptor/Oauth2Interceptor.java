@@ -31,7 +31,7 @@ public class Oauth2Interceptor implements HandlerInterceptor {
         String access_token = httpServletRequest.getHeader("access_token");
         if(StringUtils.isBlank(access_token)){
             LawUser user = new LawUser();
-            user.setUsername("");
+            user.setUsername("游客");
             user.setAuthority("visitor");
             httpServletRequest.setAttribute("user",user);
             return true;

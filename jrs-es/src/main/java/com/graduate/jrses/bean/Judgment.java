@@ -1,6 +1,6 @@
 package com.graduate.jrses.bean;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.*;
 
 @Document(indexName = "judgment",type = "message")
 public class Judgment {
@@ -11,9 +11,22 @@ public class Judgment {
     private String judgeProcess;
     private String caseNum;//案号
     private String caseName;
+    @Field(type = FieldType.String,index = FieldIndex.not_analyzed)
     private String courtName;
     private String content;//具体内容
+    @Field(type = FieldType.String,index = FieldIndex.not_analyzed)
     private String caseType;
+    @Field(type = FieldType.Date,format = DateFormat.year)
+    private String year;
+
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
 
     public String getContent() {
         return content;

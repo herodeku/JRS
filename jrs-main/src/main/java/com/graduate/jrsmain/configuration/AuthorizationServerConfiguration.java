@@ -22,18 +22,11 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Autowired
     private DataSource dataSource;
 
-//    @Bean // 声明TokenStore实现
-//    public TokenStore tokenStore() {
-//        return new JdbcTokenStore(dataSource);
-//    }
-
     @Bean // 声明 ClientDetails实现
     public ClientDetailsService clientDetails() {
         return new JdbcClientDetailsService(dataSource);
     }
 
-//    @Autowired
-//    private TokenStore tokenStore;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -54,28 +47,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-//        endpoints.authenticationManager(authenticationManager);
-//        endpoints.tokenStore(new RedisTokenStore(redisConnectionFactory));
-//        endpoints.userDetailsService(userService);
-//        endpoints.setClientDetailsService(clientDetails);
-//        //配置TokenServices参数
-//        DefaultTokenServices tokenServices = new DefaultTokenServices();
-//        tokenServices.setTokenStore(endpoints.getTokenStore());
-//        tokenServices.setSupportRefreshToken(true);
-//        tokenServices.setClientDetailsService(endpoints.getClientDetailsService());
-//        tokenServices.setTokenEnhancer(endpoints.getTokenEnhancer());
-//        tokenServices.setAccessTokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(1)); // 1天
-//        endpoints.tokenServices(tokenServices);
         endpoints.authenticationManager(authenticationManager)
                 .tokenStore(new RedisTokenStore(redisConnectionFactory));
     }
 
-//    @Bean
-//    @Primary
-//    public DefaultTokenServices tokenServices() {
-//        DefaultTokenServices tokenServices = new DefaultTokenServices();
-//        tokenServices.setSupportRefreshToken(true);
-//        tokenServices.setTokenStore(tokenStore);
-//        return tokenServices;
-//    }
 }

@@ -2,6 +2,7 @@ package com.graduate.jrsmain.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.graduate.jrsmain.bean.LawUser;
+import com.graduate.jrsmain.bean.User;
 import com.graduate.jrsmain.service.UserService;
 import com.graduate.jrsmain.util.ResultUtil;
 import io.swagger.annotations.Api;
@@ -14,6 +15,8 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/User")
@@ -37,14 +40,12 @@ public class UserController {
 
     @ApiOperation(value ="通过token获取用户信息")
     @GetMapping("/getUserByToken/{token}")
-    public ResultUtil accessToken(@PathVariable String token){
-        RedisTokenStore redisTokenStore = new RedisTokenStore(redisConnectionFactory);
-        OAuth2AccessToken oAuth2AccessToken = redisTokenStore.readAccessToken(token);
-        OAuth2Authentication oAuth2Authentication = redisTokenStore.readAuthentication(oAuth2AccessToken);
-        Authentication userAuthentication = oAuth2Authentication.getUserAuthentication();
-        Object details = userAuthentication.getDetails();
-        JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(details));
-        String username = (String) jsonObject.get("username");
-        return ResultUtil.success(userService.getUserByUserNameExcludePassWord(username));
+    public ResultUtil accessToken(@PathVariable String token, HttpServletRequest httpServletRequest){
+        LawUser lawUser = (LawUser) httpServletRequest.getAttribute("user");
+        if (lawUser.getAuthority().equals("visitor")){
+            return ResultUtil.success(lawUser);
+        }else {
+            return ResultUtil.success(userService.getUserByUserNameExcludePassWord(lawUser.getUsername()));
+        }
     }
 }

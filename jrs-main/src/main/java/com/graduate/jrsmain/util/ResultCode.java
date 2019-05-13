@@ -10,6 +10,7 @@ public enum ResultCode {
     MESSAGE_NOT_READABLE("0006","消息格式错误"),
     HISTORY_NOT_STORE("0007","历史纪录没有被记录"),
     HISTORY_NOT_DELETE("0008","历史纪录删除错误"),
+    QUERYBUILDER_NULL("0009","检索条件不能为空"),
     SYSERROR("1111","未知异常");
     private String code;
     private String message;

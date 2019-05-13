@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class HistoryServiceImpl implements HistoryService {
@@ -38,6 +40,7 @@ public class HistoryServiceImpl implements HistoryService {
 
     @Override
     public void addHistory(History history) {
+        history.setId(UUID.randomUUID().toString());
         if(historyMapper.addHistory(history)==0){
             throw new LawException(ResultCode.HISTORY_NOT_STORE);
         }
@@ -52,21 +55,24 @@ public class HistoryServiceImpl implements HistoryService {
 
     @Override
     public List<Object> getHistory(String userName) {
-        List<History> histories = historyMapper.getHistory(userName);
+        List<History> histories = historyMapper.getHistory(userName).
+                stream().sorted((o1,o2)->{
+            return Long.compare(o2.getTriggerTime(), o1.getTriggerTime());
+        }).collect(Collectors.toList());
         List<Object> objects = new ArrayList<>();
         for(History history:histories){
             switch (history.getHistoryFrom()) {
                 case "JudgmentServiceImpl":
-                    objects.add(new HistoryJudgmentVO(judgmentServiceImpl.findOne(history.getIndexId(), userName, false), history.getHistoryFrom()));
+                    objects.add(new HistoryJudgmentVO(judgmentServiceImpl.findOne(history.getIndexId(), userName, false), history.getHistoryFrom(),history.getTriggerTime()));
                     break;
                 case "VideoServiceImpl":
-                    objects.add(new HistoryVideoVO(videoServiceImpl.findOne(history.getIndexId(), userName, false), history.getHistoryFrom()));
+                    objects.add(new HistoryVideoVO(videoServiceImpl.findOne(history.getIndexId(), userName, false), history.getHistoryFrom(),history.getTriggerTime()));
                     break;
                 case "ProcessServiceImpl":
-                    objects.add(new HistoryProcessVO(processServiceImpl.findOne(history.getIndexId(), userName, false), history.getHistoryFrom()));
+                    objects.add(new HistoryProcessVO(processServiceImpl.findOne(history.getIndexId(), userName, false), history.getHistoryFrom(),history.getTriggerTime()));
                     break;
                 case "ExecutionServiceImpl":
-                    objects.add(new HistoryExecutionVO(executionServiceImpl.findOne(history.getIndexId(), userName, false), history.getHistoryFrom()));
+                    objects.add(new HistoryExecutionVO(executionServiceImpl.findOne(history.getIndexId(), userName, false), history.getHistoryFrom(),history.getTriggerTime()));
                     break;
             }
         }

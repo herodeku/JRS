@@ -14,10 +14,17 @@ public class JudgmentController {
     @Autowired
     private JudgmentService judgmentServiceImpl;
 
+//    @Autowired
+//    private Judgment2Repository judgment2Repository;
+
     @PostMapping("/StoreIndex")
     public String store(@RequestBody Judgment judgment){
         return judgmentServiceImpl.storeIndex(judgment);
     }
 
-
+//    @PostMapping("/StoreIndex2")
+//    public String store2(@RequestBody Judgment2 judgment){
+//        judgment2Repository.index(judgment);
+//        return null;
+//    }
 }

@@ -1,12 +1,12 @@
 package com.graduate.jrses.bean;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.*;
 
 @Document(indexName = "video",type = "message")
 public class Video {
     @Id
-    private String caseId;
+    private String id;
     private String courtName;
     private String caseNo;
     private String title;
@@ -16,6 +16,16 @@ public class Video {
     private String judge;
     private String beginTime;
     private String caseType;
+    @Field(type = FieldType.Date,format = DateFormat.year)
+    private String year;
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
 
     public String getCaseType() {
         return caseType;
@@ -33,12 +43,12 @@ public class Video {
         this.beginTime = beginTime;
     }
 
-    public String getCaseId() {
-        return caseId;
+    public String getId() {
+        return id;
     }
 
-    public void setCaseId(String caseId) {
-        this.caseId = caseId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getCourtName() {

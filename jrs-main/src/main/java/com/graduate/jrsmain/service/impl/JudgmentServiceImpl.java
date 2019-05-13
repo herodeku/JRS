@@ -6,8 +6,10 @@ import com.graduate.jrsmain.service.JudgmentService;
 import com.graduate.jrsmain.util.EsUtil;
 import com.graduate.jrsmain.util.PublicUtil;
 import com.graduate.jrsmain.vo.AdvJudgment;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.stereotype.Service;
 import java.util.*;
 
@@ -19,6 +21,11 @@ public class JudgmentServiceImpl implements JudgmentService {
 
     @Autowired
     private PublicUtil publicUtil;
+
+    @Autowired
+    public ElasticsearchTemplate elasticsearchTemplate;
+
+    public  QueryBuilder queryBuilder;
 
     @Override
     public Judgment findOne(String id,String username,boolean b) {
@@ -36,31 +43,28 @@ public class JudgmentServiceImpl implements JudgmentService {
 
     @Override
     public List<Judgment> search(String message, Pageable pageable) {
-        return EsUtil.search(judgmentRepository,EsUtil.createJudgmentBoolQueryBuilder(message),pageable);
+        queryBuilder = EsUtil.createJudgmentBoolQueryBuilder(message);
+        return EsUtil.search(judgmentRepository,queryBuilder,pageable);
     }
 
     @Override
     public List<Judgment> advSearch(AdvJudgment advJudgment, Pageable pageable){
-        return EsUtil.search(judgmentRepository,EsUtil.createAdvJudgmentBoolQueryBuilder(advJudgment),pageable);
+        queryBuilder = EsUtil.createAdvJudgmentBoolQueryBuilder(advJudgment);
+        return EsUtil.search(judgmentRepository,queryBuilder,pageable);
     }
 
     @Override
     public Integer searchNum(String message) {
-        return EsUtil.searchNum(judgmentRepository,EsUtil.createJudgmentBoolQueryBuilder(message));
+        return EsUtil.searchNum(judgmentRepository,queryBuilder);
     }
 
     @Override
     public Integer advSearchNum(AdvJudgment advJudgment){
-        return EsUtil.searchNum(judgmentRepository,EsUtil.createAdvJudgmentBoolQueryBuilder(advJudgment));
+        return EsUtil.searchNum(judgmentRepository,queryBuilder);
     }
 
-//    @Override
-//    public List<Judgment> getAllJudgment() {
-//        List<Judgment> cases = new ArrayList<>();
-//        Iterator<Judgment> iterator = judgmentRepository.findAll().iterator();
-//        while (iterator.hasNext()){
-//            cases.add(iterator.next());
-//        }
-//        return cases;
-//    }
+    @Override
+    public Map<String,Map<Object, Long>>  aggregationCount() {
+        return publicUtil.aggregationCount(queryBuilder, elasticsearchTemplate,"judgment","message", "year","caseType","courtName");
+    }
 }

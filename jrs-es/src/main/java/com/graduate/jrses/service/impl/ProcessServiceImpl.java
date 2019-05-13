@@ -15,7 +15,7 @@ public class ProcessServiceImpl implements ProcessService {
     private ProcessRepository processRepository;
 
     @Override
-    public String store(Process process) {
+    public String storeIndex(Process process) {
         if(StringUtils.isNotBlank(process.getId())){
             processRepository.index(process);
             return ResultUtil.SUCCESS;

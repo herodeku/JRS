@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -34,7 +35,7 @@ public class JudgmentController {
     public ResultUtil findOne(
             @ApiParam(name = "id", value = "id", required = true)@PathVariable String id,
             @ApiIgnore @RequestAttribute(name = "user") LawUser user){
-        return ResultUtil.success(judgmentServiceImpl.findOne(id));
+        return ResultUtil.success(judgmentServiceImpl.findOne(id,user.getUsername(),true));
     }
 
     @ApiOperation(value = "获取所有索引")
@@ -95,4 +96,12 @@ public class JudgmentController {
         return ResultUtil.success(judgmentServiceImpl.advSearchNum(judgmentVO.getAdvJudgment()));
     }
 
+    @ApiOperation(value = "检索分类")
+    @GetMapping("/aggregation")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "String", name = "access_token", required = true) })
+    public ResultUtil aggregation(
+            @ApiIgnore @RequestAttribute(name = "user") LawUser user){
+        return ResultUtil.success(judgmentServiceImpl.aggregationCount());
+    }
 }

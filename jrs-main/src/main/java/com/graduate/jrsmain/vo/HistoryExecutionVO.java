@@ -6,10 +6,20 @@ public class HistoryExecutionVO{
 
     private Execution execution;
     private String from;
+    private Long triggerTime;
 
-    public HistoryExecutionVO(Execution execution, String from) {
+    public HistoryExecutionVO(Execution execution, String from, Long triggerTime) {
         this.execution = execution;
         this.from = from;
+        this.triggerTime = triggerTime;
+    }
+
+    public Long getTriggerTime() {
+        return triggerTime;
+    }
+
+    public void setTriggerTime(Long triggerTime) {
+        this.triggerTime = triggerTime;
     }
 
     public Execution getExecution() {

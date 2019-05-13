@@ -18,7 +18,7 @@ public class ProcessController {
     @ApiOperation("存储案例")
     @PostMapping("/StoreIndex")
     public String storeCase(@RequestBody Process process) {
-        return processServiceImpl.store(process);
+        return processServiceImpl.storeIndex(process);
     }
 
 }

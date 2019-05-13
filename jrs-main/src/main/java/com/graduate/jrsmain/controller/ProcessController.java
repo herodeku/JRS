@@ -67,10 +67,37 @@ public class ProcessController {
     @PostMapping("/advSearch")
     public ResultUtil advSearch(
             @ApiParam(name = "message", value = "检索条件", required = true)@RequestBody ProcessVO processVO,
-            @ApiIgnore @RequestAttribute(name = "user") LawUser user) throws IntrospectionException, InstantiationException, IllegalAccessException, InvocationTargetException {
+            @ApiIgnore @RequestAttribute(name = "user") LawUser user){
         //如果filename为空就填content，如果content为空就填filename，如果都有就填content
         logger.info("Search-Judgement"+"-Authority:"+user.getAuthority()+"-UserName:"+user.getUsername()+"-Message:"+(StringUtils.isNotBlank(processVO.getAdvProcess().getFileName())?processVO.getAdvProcess().getFileName():processVO.getAdvProcess().getContent()));
         PageRequest pageRequest = new PageRequest(processVO.getPage(), processVO.getSize());
         return ResultUtil.success(processServiceImpl.advSearch(processVO.getAdvProcess(),pageRequest));
+    }
+    @ApiOperation(value = "基础检索到的总数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "String", name = "access_token", required = true) })
+    @GetMapping("/simpleSearchNum/{message}")
+    public ResultUtil simpleSearchNum(
+            @ApiParam(name = "message", value = "查询内容", required = true)@PathVariable String message,
+            @ApiIgnore @RequestAttribute(name = "user") LawUser user){
+        return ResultUtil.success(processServiceImpl.searchNum(message));
+    }
+    @ApiOperation(value = "高级检索到的总数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "String", name = "access_token", required = true) })
+    @PostMapping("/advSearchNum")
+    public ResultUtil advSearchNum(
+            @ApiParam(name = "message", value = "检索条件", required = true)@RequestBody ProcessVO processVO,
+            @ApiIgnore @RequestAttribute(name = "user") LawUser user){
+        return ResultUtil.success(processServiceImpl.advSearchNum(processVO.getAdvProcess()));
+    }
+    @ApiOperation(value = "/检索分类")
+    @GetMapping("/aggregation")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "String", name = "access_token", required = true) })
+    public ResultUtil aggregation(
+            @ApiIgnore @RequestAttribute(name = "user") LawUser user){
+        processServiceImpl.aggregationCount();
+        return ResultUtil.success(null);
     }
 }

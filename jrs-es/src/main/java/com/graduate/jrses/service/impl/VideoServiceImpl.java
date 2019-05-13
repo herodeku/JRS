@@ -17,7 +17,7 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public String storeIndex(Video video) {
-        if(StringUtils.isNotBlank(video.getCaseId())){
+        if(StringUtils.isNotBlank(video.getId())){
             videoRepository.index(video);
             return ResultUtil.SUCCESS;
         }else {

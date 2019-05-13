@@ -1,5 +1,8 @@
 package com.graduate.jrslog.util;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -7,6 +10,8 @@ import java.io.IOException;
 import java.util.*;
 
 public class AnalyzeUtil{
+
+
     public static List<String> analyzeMessage(String message){
         ArrayList<String> list = new ArrayList<>();
         int authorityIndex = message.indexOf("Authority:");
