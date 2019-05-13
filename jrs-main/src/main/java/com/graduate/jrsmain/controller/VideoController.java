@@ -36,6 +36,18 @@ public class VideoController {
         return ResultUtil.success(videoServiceImpl.findOne(id,user.getUsername(),true));
     }
 
+    @ApiOperation(value = "获取所有索引")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "String", name = "access_token", required = true) })
+    @GetMapping("/findAll/{page}/{size}")
+    public ResultUtil findAll(
+            @ApiParam(name = "page", value = "第page页（从0开始）", required = true)@PathVariable Integer page,
+            @ApiParam(name = "size", value = "每页size条数据", required = true)@PathVariable Integer size,
+            @ApiIgnore @RequestAttribute(name = "user") LawUser user) {
+        PageRequest pageRequest = new PageRequest(page, size);
+        return ResultUtil.success(videoServiceImpl.findAll(pageRequest));
+    }
+
     @ApiOperation(value = "基础检索")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", dataType = "String", name = "access_token", required = true) })
@@ -45,7 +57,7 @@ public class VideoController {
             @ApiParam(name = "page", value = "第page页（从0开始）", required = true)@PathVariable Integer page,
             @ApiParam(name = "size", value = "每页size条数据", required = true)@PathVariable Integer size,
             @ApiIgnore @RequestAttribute(name = "user") LawUser user){
-        logger.info("Search-Video"+"Authority:"+user.getAuthority()+"Message:"+message);
+        logger.info("Search-Video"+"-Authority:"+user.getAuthority()+"-UserName:"+user.getUsername()+"-Message:"+message);
         PageRequest pageRequest = new PageRequest(page, size);
         return ResultUtil.success(videoServiceImpl.search(message,pageRequest));
     }

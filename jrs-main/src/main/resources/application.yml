@@ -31,5 +31,5 @@ spring:
     port: 5672
     username: guest
     password: guest
-logging:
-  path: /opt/JRS/spring/log
+#logging:
+#  path: /opt/JRS/spring/log

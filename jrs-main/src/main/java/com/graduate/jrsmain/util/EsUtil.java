@@ -17,8 +17,13 @@ import java.util.*;
 
 public class EsUtil {
     public static <T> List<T> search(ElasticsearchRepository<T,String> repository, QueryBuilder builder, Pageable pageable){
-        Iterable<T> judgments = repository.search(builder,pageable);
-        Iterator<T> iterator = judgments.iterator();
+        Iterable<T> iterable;
+        if(builder == null){
+            iterable = repository.findAll(pageable);
+        }else{
+            iterable = repository.search(builder,pageable);
+        }
+        Iterator<T> iterator = iterable.iterator();
         List<T> list = new ArrayList<>();
         while (iterator.hasNext()){
             list.add(iterator.next());

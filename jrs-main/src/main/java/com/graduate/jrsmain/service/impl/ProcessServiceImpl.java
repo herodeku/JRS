@@ -1,6 +1,5 @@
 package com.graduate.jrsmain.service.impl;
 
-import com.graduate.jrsmain.bean.History;
 import com.graduate.jrsmain.bean.Process;
 import com.graduate.jrsmain.repository.ProcessRepository;
 import com.graduate.jrsmain.service.ProcessService;
@@ -28,6 +27,11 @@ public class ProcessServiceImpl implements ProcessService {
             publicUtil.storeHistory(one, id,username , this.getClass());
         }
         return one;
+    }
+
+    @Override
+    public List<Process> findAll(Pageable pageable) {
+        return EsUtil.search(processRepository,null,pageable);
     }
 
     @Override
