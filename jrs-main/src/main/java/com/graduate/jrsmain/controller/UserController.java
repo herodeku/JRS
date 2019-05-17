@@ -1,22 +1,29 @@
 package com.graduate.jrsmain.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.graduate.jrsmain.bean.CustomUserDetails;
 import com.graduate.jrsmain.bean.LawUser;
 import com.graduate.jrsmain.bean.User;
 import com.graduate.jrsmain.service.UserService;
 import com.graduate.jrsmain.util.ResultUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import com.graduate.jrsmain.util.StringToObjectUtil;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
+import sun.applet.Main;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.sound.midi.Soundbank;
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/User")
@@ -25,6 +32,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ConsumerTokenServices consumerTokenServices;
 
     @Autowired
     RedisConnectionFactory redisConnectionFactory;
@@ -38,14 +48,18 @@ public class UserController {
         return ResultUtil.success(userService.register(user));
     }
 
-    @ApiOperation(value ="通过token获取用户信息")
-    @GetMapping("/getUserByToken/{token}")
-    public ResultUtil accessToken(@PathVariable String token, HttpServletRequest httpServletRequest){
-        LawUser lawUser = (LawUser) httpServletRequest.getAttribute("user");
-        if (lawUser.getAuthority().equals("visitor")){
-            return ResultUtil.success(lawUser);
-        }else {
-            return ResultUtil.success(userService.getUserByUserNameExcludePassWord(lawUser.getUsername()));
+    @ApiOperation(value ="登出")
+    @GetMapping("/logout/{token}")
+    public ResultUtil logout(@PathVariable String token){
+        if(consumerTokenServices.revokeToken(token)){
+            return ResultUtil.success("登陆成功");
+        }else{
+            return ResultUtil.error(null);
         }
+    }
+    @ApiOperation(value ="获取用户信息")
+    @GetMapping("/getInfo")
+    public ResultUtil getInfo(Principal principal){
+        return ResultUtil.success(StringToObjectUtil.stringToLawUser(principal));
     }
 }

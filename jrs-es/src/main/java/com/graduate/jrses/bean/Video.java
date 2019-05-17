@@ -6,6 +6,7 @@ import org.springframework.data.elasticsearch.annotations.*;
 @Document(indexName = "video",type = "message")
 public class Video {
     @Id
+    @Field(type = FieldType.String,index = FieldIndex.not_analyzed)
     private String id;
     private String courtName;
     private String caseNo;

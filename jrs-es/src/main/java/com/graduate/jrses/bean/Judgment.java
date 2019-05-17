@@ -5,6 +5,7 @@ import org.springframework.data.elasticsearch.annotations.*;
 @Document(indexName = "judgment",type = "message")
 public class Judgment {
     @Id
+    @Field(type = FieldType.String,index = FieldIndex.not_analyzed)
     private String id;//文书id
     private String judgeContent;//裁判内容，简情
     private String judgeDate;

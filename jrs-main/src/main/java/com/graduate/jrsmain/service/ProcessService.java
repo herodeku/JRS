@@ -11,7 +11,6 @@ public interface ProcessService {
     List<Process> findAll(Pageable pageable);
     List<Process> search(String message, Pageable pageable);
     List<Process> advSearch(AdvProcess advProcess, Pageable pageable);
-    Integer searchNum(String message);
-    Integer advSearchNum(AdvProcess advProcess);
+    Long searchNum();
     Map<String,Map<Object,Long>>  aggregationCount();
 }

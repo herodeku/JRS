@@ -1,13 +1,15 @@
 package com.graduate.jrsmain.bean;
 
-public class LawUser {
+import java.io.Serializable;
+
+public class LawUser implements Serializable {
     private String username; //acount
-    private String password;
     private String authority;//规定好   民众(populace)-司法人员(judicialOfficer)
     private String sex;
     private Integer age;
     private String phone;
     private String nickname;
+    private String password;
 
     public String getNickname() {
         return nickname;

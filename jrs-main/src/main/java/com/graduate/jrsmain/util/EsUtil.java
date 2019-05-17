@@ -12,8 +12,10 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.bucket.terms.InternalTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.elasticsearch.search.aggregations.metrics.valuecount.InternalValueCount;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
@@ -38,14 +40,6 @@ public class EsUtil {
             list.add(iterator.next());
         }
         return list;
-    }
-    public static <T> Integer searchNum(ElasticsearchRepository<T,String> repository, QueryBuilder builder){
-        Iterable<T> judgments = repository.search(builder);
-        int num=0;
-        for (T judgment : judgments) {
-            num++;
-        }
-        return num;
     }
     private static void buildBoolQueryBuilder(BoolQueryBuilder queryBuilder, String message, String... parameters){
         for(String parameter : parameters){
@@ -129,24 +123,39 @@ public class EsUtil {
                 "judgeProcess", "caseNum", "caseName","courtName","judgeContent","title","content","filename","caseNo","description","judge");
         return bollQueryBuilder;
     }
-    public static SearchQuery aggregationCount(QueryBuilder queryBuilder,String filed,String index,String type){
+    public static SearchQuery aggregation(QueryBuilder queryBuilder,String filed,String index,String type,String function){
         NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();//查询条件生成器
         nativeSearchQueryBuilder.withQuery(queryBuilder);
         nativeSearchQueryBuilder.withIndices(index).withTypes(type);
-        nativeSearchQueryBuilder.addAggregation(AggregationBuilders.terms("extendGroup").field(filed));
+        switch (function){
+            case "terms":
+                nativeSearchQueryBuilder.addAggregation(AggregationBuilders.terms("termsBucket").field(filed));
+                break;
+            case "count":
+                nativeSearchQueryBuilder.addAggregation(AggregationBuilders.count("countBucket").field("id"));
+                break;
+        }
         return nativeSearchQueryBuilder.build();
     }
-    public static  Map<Object,Long> aggregationQuery(SearchQuery searchQuery,ElasticsearchTemplate elasticsearchTemplate){
+    public static  Map<Object,Long> aggregationTerms(SearchQuery searchQuery,ElasticsearchTemplate elasticsearchTemplate){
         Map<Object, Long> hashMap = new HashMap<>();
         Aggregations query = elasticsearchTemplate.query(searchQuery, (SearchResponse response) -> {
             return response.getAggregations();
         });
         Map<String, Aggregation> stringAggregationMap = query.asMap();
-        InternalTerms stringTerms = (InternalTerms) stringAggregationMap.get("extendGroup");
+        InternalTerms stringTerms = (InternalTerms) stringAggregationMap.get("termsBucket");
         List<Terms.Bucket> buckets = stringTerms.getBuckets();
         for(Terms.Bucket b:buckets){
             hashMap.put(b.getKey(), b.getDocCount());
         }
         return hashMap;
+    }
+    public static Long aggregationCount(ElasticsearchTemplate elasticsearchTemplate,SearchQuery searchQuery){
+        Aggregations query = elasticsearchTemplate.query(searchQuery, (SearchResponse response) -> {
+            return response.getAggregations();
+        });
+        Map<String, Aggregation> aggregationMap = query.asMap();
+        InternalValueCount valueCount = (InternalValueCount)aggregationMap.get("countBucket");
+        return valueCount.getValue();
     }
 }

@@ -21,14 +21,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        User user = userMapper.getUserByUserName(s);
+        LawUser user = userMapper.getUserByUserName(s);
         return new CustomUserDetails(user);
     }
 
-    @Override
-    public User getUserByUserName(String s) {
-        return userMapper.getUserByUserName(s);
-    }
+//    @Override
+//    public User getUserByUserName(String s) {
+//        return userMapper.getUserByUserName(s);
+//    }
 
     @Override
     public LawUser getUserByUserNameExcludePassWord(String s) {

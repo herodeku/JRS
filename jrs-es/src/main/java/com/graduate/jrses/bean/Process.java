@@ -6,6 +6,7 @@ import org.springframework.data.elasticsearch.annotations.*;
 @Document(indexName = "process",type = "message")
 public class Process {
     @Id
+    @Field(type = FieldType.String,index = FieldIndex.not_analyzed)
     private String id;
     private String fileName;
     private String caseType;

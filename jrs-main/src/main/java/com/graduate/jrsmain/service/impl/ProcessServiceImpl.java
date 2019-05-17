@@ -39,6 +39,7 @@ public class ProcessServiceImpl implements ProcessService {
 
     @Override
     public List<Process> findAll(Pageable pageable) {
+        queryBuilder = null;
         return EsUtil.search(processRepository,null,pageable);
     }
 
@@ -55,17 +56,12 @@ public class ProcessServiceImpl implements ProcessService {
     }
 
     @Override
-    public Integer searchNum(String message) {
-        return EsUtil.searchNum(processRepository,queryBuilder);
-    }
-
-    @Override
-    public Integer advSearchNum(AdvProcess advProcess) {
-        return EsUtil.searchNum(processRepository,queryBuilder);
+    public Long searchNum() {
+        return EsUtil.aggregationCount(elasticsearchTemplate,EsUtil.aggregation(queryBuilder,"","process","message","count"));
     }
 
     @Override
     public Map<String,Map<Object, Long>> aggregationCount() {
-        return publicUtil.aggregationCount(queryBuilder, elasticsearchTemplate, "process","message","year","programme","province");
+        return publicUtil.aggregationTermsClassify(queryBuilder, elasticsearchTemplate, "process","message","year","programme","province");
     }
 }

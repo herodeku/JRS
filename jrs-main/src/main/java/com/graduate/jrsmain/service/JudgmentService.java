@@ -11,7 +11,6 @@ public interface JudgmentService {
     List<Judgment> findAll(Pageable pageable);
     List<Judgment> search(String message, Pageable pageable);
     List<Judgment> advSearch(AdvJudgment advJudgment, Pageable pageable);
-    Integer searchNum(String message);
-    Integer advSearchNum(AdvJudgment advJudgment);
+    Long searchNum();
     Map<String,Map<Object,Long>>  aggregationCount();
 }

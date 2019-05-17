@@ -4,8 +4,10 @@ import com.graduate.jrsmain.bean.Execution;
 import com.graduate.jrsmain.repository.ExecutionRepository;
 import com.graduate.jrsmain.service.ExecutionService;
 import com.graduate.jrsmain.util.*;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -18,6 +20,11 @@ public class ExecutionServiceImpl implements ExecutionService {
     @Autowired
     private PublicUtil publicUtil;
 
+    private QueryBuilder queryBuilder;
+
+    @Autowired
+    private ElasticsearchTemplate elasticsearchTemplate;
+
     @Override
     public Execution findOne(String id,String username,boolean b) {
         Execution one = executionRepository.findOne(id);
@@ -29,16 +36,18 @@ public class ExecutionServiceImpl implements ExecutionService {
 
     @Override
     public List<Execution> findAll(Pageable pageable) {
+        queryBuilder = null;
         return EsUtil.search(executionRepository, null, pageable);
     }
 
     @Override
     public List<Execution> search(String message, Pageable pageable) {
-        return EsUtil.search(executionRepository,EsUtil.createExecutionBoolQueryBuilder(message),pageable);
+        queryBuilder = EsUtil.createExecutionBoolQueryBuilder(message);
+        return EsUtil.search(executionRepository,queryBuilder,pageable);
     }
 
     @Override
-    public Integer searchNum(String message) {
-        return EsUtil.searchNum(executionRepository,EsUtil.createExecutionBoolQueryBuilder(message));
+    public Long searchNum() {
+        return EsUtil.aggregationCount(elasticsearchTemplate,EsUtil.aggregation(queryBuilder,"","execution","message","count"));
     }
 }

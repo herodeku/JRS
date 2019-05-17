@@ -23,9 +23,9 @@ public class JudgmentServiceImpl implements JudgmentService {
     private PublicUtil publicUtil;
 
     @Autowired
-    public ElasticsearchTemplate elasticsearchTemplate;
+    private ElasticsearchTemplate elasticsearchTemplate;
 
-    public  QueryBuilder queryBuilder;
+    private  QueryBuilder queryBuilder;
 
     @Override
     public Judgment findOne(String id,String username,boolean b) {
@@ -38,6 +38,7 @@ public class JudgmentServiceImpl implements JudgmentService {
 
     @Override
     public List<Judgment> findAll(Pageable pageable) {
+        queryBuilder=null;
         return EsUtil.search(judgmentRepository, null,pageable);
     }
 
@@ -54,17 +55,12 @@ public class JudgmentServiceImpl implements JudgmentService {
     }
 
     @Override
-    public Integer searchNum(String message) {
-        return EsUtil.searchNum(judgmentRepository,queryBuilder);
-    }
-
-    @Override
-    public Integer advSearchNum(AdvJudgment advJudgment){
-        return EsUtil.searchNum(judgmentRepository,queryBuilder);
+    public Long searchNum() {
+        return EsUtil.aggregationCount(elasticsearchTemplate,EsUtil.aggregation(queryBuilder,"","judgment","message","count"));
     }
 
     @Override
     public Map<String,Map<Object, Long>>  aggregationCount() {
-        return publicUtil.aggregationCount(queryBuilder, elasticsearchTemplate,"judgment","message", "year","caseType","courtName");
+        return publicUtil.aggregationTermsClassify(queryBuilder, elasticsearchTemplate,"judgment","message", "year","caseType","courtName");
     }
 }

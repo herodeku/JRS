@@ -11,7 +11,7 @@ import org.springframework.dao.DataAccessException;
 public interface UserMapper {
 
     @Select("select * from USER where username=#{s}")
-    public User getUserByUserName(String s);
+    public LawUser getUserByUserName(String s);
 
     @Select("select username,authority,sex,age,nickname,phone from USER where username=#{s}")
     public LawUser getUserByUserNameExcludePassWord(String s);

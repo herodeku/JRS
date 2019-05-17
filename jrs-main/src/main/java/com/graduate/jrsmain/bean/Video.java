@@ -1,14 +1,12 @@
 package com.graduate.jrsmain.bean;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.DateFormat;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.*;
 
 @Document(indexName = "video",type = "message")
 public class Video {
     @Id
+    @Field(type = FieldType.String,index = FieldIndex.not_analyzed)
     private String id;
     private String courtName;
     private String caseNo;
