@@ -29,11 +29,11 @@ public class UserServiceImpl implements UserService {
 //    public User getUserByUserName(String s) {
 //        return userMapper.getUserByUserName(s);
 //    }
-
-    @Override
-    public LawUser getUserByUserNameExcludePassWord(String s) {
-        return userMapper.getUserByUserNameExcludePassWord(s);
-    }
+//
+//    @Override
+//    public LawUser getUserByUserNameExcludePassWord(String s) {
+//        return userMapper.getUserByUserNameExcludePassWord(s);
+//    }
 
     @Override
     public String register(LawUser user) {

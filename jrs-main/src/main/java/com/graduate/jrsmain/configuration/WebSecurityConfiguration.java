@@ -14,7 +14,6 @@ public class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdap
 
     private final UserService userService;
 
-
     @Autowired
     public WebSecurityConfiguration(UserService userService) {
         this.userService = userService;

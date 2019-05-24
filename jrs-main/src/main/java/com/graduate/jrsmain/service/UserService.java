@@ -6,6 +6,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserService extends UserDetailsService {
     //public LawUser getUserByUserName(String s);
-    public LawUser getUserByUserNameExcludePassWord(String s);
+    //public LawUser getUserByUserNameExcludePassWord(String s);
     public String register(LawUser user);
 }

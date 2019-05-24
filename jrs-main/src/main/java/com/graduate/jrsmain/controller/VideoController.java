@@ -32,7 +32,8 @@ public class VideoController {
     @GetMapping("/findOne/{id}")
     public ResultUtil findOne(
             @ApiParam(name = "id", value = "id", required = true)@PathVariable String id,
-            @ApiIgnore @RequestAttribute(name = "user") LawUser user) {
+            Principal principal) {
+        LawUser user = StringToObjectUtil.stringToLawUser(principal);
         return ResultUtil.success(videoServiceImpl.findOne(id,user.getUsername(),true));
     }
 
@@ -40,8 +41,8 @@ public class VideoController {
     @GetMapping("/findAll/{page}/{size}")
     public ResultUtil findAll(
             @ApiParam(name = "page", value = "第page页（从0开始）", required = true)@PathVariable Integer page,
-            @ApiParam(name = "size", value = "每页size条数据", required = true)@PathVariable Integer size,
-            @ApiIgnore @RequestAttribute(name = "user") LawUser user) {
+            @ApiParam(name = "size", value = "每页size条数据", required = true)@PathVariable Integer size
+    ) {
         PageRequest pageRequest = new PageRequest(page, size);
         return ResultUtil.success(videoServiceImpl.findAll(pageRequest));
     }
